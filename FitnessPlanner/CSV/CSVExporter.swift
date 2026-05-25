@@ -1,7 +1,7 @@
 import Foundation
 
 enum CSVExporter {
-    private static let header = "date,section,exercise,set_number,target_reps,target_weight,duration_seconds,actual_weight,actual_reps,actual_duration_seconds,notes"
+    private static let header = "date,section,exercise,set_number,target_reps,target_weight,duration_seconds,rest_seconds,actual_weight,actual_reps,actual_duration_seconds,notes"
 
     private static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -32,6 +32,7 @@ enum CSVExporter {
                     let targetRepsField = exercise.targetReps ?? ""
                     let targetWeightField = exercise.targetWeight.map(formatNumber) ?? ""
                     let durationField = exercise.durationSeconds.map(String.init) ?? ""
+                    let restField = exercise.restSeconds.map(String.init) ?? ""
                     let actualWeightField = exercise.isTimeBased ? "" : formatNumber(set.weight)
                     let actualRepsField = exercise.isTimeBased ? "" : String(set.reps)
                     let actualDurationField = set.durationSeconds.map(String.init) ?? ""
@@ -44,6 +45,7 @@ enum CSVExporter {
                         targetRepsField,
                         targetWeightField,
                         durationField,
+                        restField,
                         actualWeightField,
                         actualRepsField,
                         actualDurationField,

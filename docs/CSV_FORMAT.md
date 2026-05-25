@@ -38,6 +38,7 @@ Put these on the header row, in any order. Lowercase is conventional; the parser
 | `target_reps`      | yes for weight-based rows    | free text                 | `8-10`, `5`, `AMRAP`, `5+`, etc. Stored verbatim.                       |
 | `target_weight`    | optional                     | number, kilograms         | Leave blank for bodyweight / rep-only work. Decimals allowed (`22.5`).  |
 | `duration_seconds` | yes for time-based rows      | positive integer          | Presence of any value flips the row to time-based (see §4).             |
+| `rest_seconds`     | optional                     | positive integer          | Break shown as a countdown after each set and after the exercise.       |
 | `video_url`        | optional                     | YouTube URL               | Must be parseable as a YouTube link (see §7). Whole import fails if not.|
 | `notes`            | optional                     | free text                 | Quote with `"…"` if it contains a comma or a double-quote.              |
 
@@ -61,8 +62,8 @@ Used for any exercise where the user logs sets × reps.
 Example rows (header omitted for brevity):
 
 ```
-2026-05-25,Bench Press,4,6-8,80,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Pause briefly at chest
-2026-05-26,Pull-up,4,5-8,,,https://youtu.be/dQw4w9WgXcQ,Bodyweight — add weight when all sets hit 8
+2026-05-25,Bench Press,4,6-8,80,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Pause briefly at chest
+2026-05-26,Pull-up,4,5-8,,,120,https://youtu.be/dQw4w9WgXcQ,Bodyweight — add weight when all sets hit 8
 ```
 
 ### Time-based (warmups, cooldowns, holds, mobility)
@@ -75,16 +76,20 @@ Used for anything timed rather than counted. The importer creates a single set i
 Example rows:
 
 ```
-2026-05-25,Arm Circles,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
-2026-05-25,Child's Pose,,,,90,https://youtu.be/dQw4w9WgXcQ,
+2026-05-25,Arm Circles,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
+2026-05-25,Child's Pose,,,,90,,https://youtu.be/dQw4w9WgXcQ,
 ```
 
 ### Cheat-sheet: which columns are populated
 
-| shape         | sets | target_reps | target_weight | duration_seconds |
-|---------------|:----:|:-----------:|:-------------:|:----------------:|
-| weight-based  |  ✅  |     ✅      |   optional    |       blank      |
-| time-based    | blank|    blank    |     blank     |        ✅        |
+| shape         | sets | target_reps | target_weight | duration_seconds | rest_seconds |
+|---------------|:----:|:-----------:|:-------------:|:----------------:|:------------:|
+| weight-based  |  ✅  |     ✅      |   optional    |       blank      |   optional   |
+| time-based    | blank|    blank    |     blank     |        ✅        |   optional   |
+
+### Rest between sets and exercises
+
+`rest_seconds` is the break to take after each completed set and after the exercise itself. When set, the app shows a fullscreen countdown when the user taps **Add set** or **Complete & Next** and auto-advances when it reaches zero (user can skip). Leave blank for no rest.
 
 ---
 
@@ -159,7 +164,7 @@ Standard CSV rules:
 In practice the only column that regularly needs quoting is `notes`:
 
 ```
-2026-05-27,Romanian Deadlift,3,8-10,90,,https://youtu.be/dQw4w9WgXcQ,"Pause at bottom, controlled"
+2026-05-27,Romanian Deadlift,3,8-10,90,,120,https://youtu.be/dQw4w9WgXcQ,"Pause at bottom, controlled"
 ```
 
 ---
@@ -182,15 +187,15 @@ In practice the only column that regularly needs quoting is `notes`:
 Single day, exercising every feature this guide covers. Save as `monday.csv` (or anything), import via the app.
 
 ```csv
-date,exercise,sets,target_reps,target_weight,duration_seconds,video_url,notes
+date,exercise,sets,target_reps,target_weight,duration_seconds,rest_seconds,video_url,notes
 # warmup
-2026-05-25,Arm Circles,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
-2026-05-25,Shoulder Dislocates,,,,60,https://youtu.be/dQw4w9WgXcQ,Band or PVC
+2026-05-25,Arm Circles,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
+2026-05-25,Shoulder Dislocates,,,,60,30,https://youtu.be/dQw4w9WgXcQ,Band or PVC
 # exercises
-2026-05-25,Bench Press,4,6-8,80,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,"Pause at chest, controlled"
-2026-05-25,Pull-up,4,5-8,,,https://youtu.be/dQw4w9WgXcQ,Bodyweight; add load when all sets hit 8
+2026-05-25,Bench Press,4,6-8,80,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,"Pause at chest, controlled"
+2026-05-25,Pull-up,4,5-8,,,120,https://youtu.be/dQw4w9WgXcQ,Bodyweight; add load when all sets hit 8
 # cooldown
-2026-05-25,Child's Pose,,,,90,https://youtu.be/dQw4w9WgXcQ,
+2026-05-25,Child's Pose,,,,90,,https://youtu.be/dQw4w9WgXcQ,
 ```
 
 What this demonstrates: header row, all three section headers, a time-based warmup with `duration_seconds`, a weight-based lift with notes containing a comma (quoted), a bodyweight lift with `target_weight` left blank, and a time-based cooldown.

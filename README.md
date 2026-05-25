@@ -31,6 +31,7 @@ UTF-8, comma-separated, one row per exercise. Header row required.
 | `target_reps`      | weight-based rows | Free text — `8-10`, `5`, `AMRAP`, etc.                                |
 | `target_weight`    | no                | Number in kg. Leave blank for bodyweight or rep-only exercises.       |
 | `duration_seconds` | time-based rows   | Positive integer. Flips the row to time-based (warmups, holds, stretches). When set, `sets`/`target_reps`/`target_weight` must be blank. |
+| `rest_seconds`     | no                | Positive integer. Countdown shown after each set / after the exercise.|
 | `video_url`        | no                | YouTube link (`youtu.be/…`, `youtube.com/watch?v=…`, `/shorts/…`, `/embed/…`). |
 | `notes`            | no                | Free text. Quote with `"…"` if it contains commas.                    |
 

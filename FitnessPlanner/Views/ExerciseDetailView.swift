@@ -38,6 +38,7 @@ struct ExerciseDetailView: View {
     var body: some View {
         ExerciseStageView(
             exercise: currentExercise,
+            nextExercise: nextExercise,
             isLast: isLast,
             onAdvance: advance,
             onCompleteWorkout: completeWorkout
@@ -78,21 +79,32 @@ struct ExerciseDetailView: View {
 private enum RunnerPhase {
     case notStarted
     case running
+    case resting
     case finished
+}
+
+private enum RestPending {
+    case none
+    case resumeRunning
+    case advanceExercise
 }
 
 private struct ExerciseStageView: View {
     @Environment(\.modelContext) private var context
     @Bindable var exercise: PlannedExercise
+    let nextExercise: PlannedExercise?
     let isLast: Bool
     let onAdvance: () -> Void
     let onCompleteWorkout: () -> Void
 
     @State private var phase: RunnerPhase = .notStarted
     @State private var remainingSeconds: Int = 0
+    @State private var restRemaining: Int = 0
+    @State private var restPending: RestPending = .none
     @State private var isVideoPlaying: Bool = true
     @State private var inputStage: SetInputStage = .weight
     @State private var ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var transientMessage: String?
 
     private var sortedSets: [LoggedSet] {
         exercise.sets.sorted { $0.setNumber < $1.setNumber }
@@ -132,6 +144,18 @@ private struct ExerciseStageView: View {
         }
         .onReceive(ticker) { _ in
             tickTimer()
+        }
+        .overlay(alignment: .top) {
+            if let msg = transientMessage {
+                Text(msg)
+                    .font(.subheadline.weight(.medium))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(.regularMaterial, in: Capsule())
+                    .shadow(color: .black.opacity(0.1), radius: 6, y: 2)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
         }
     }
 
@@ -204,9 +228,29 @@ private struct ExerciseStageView: View {
             } else {
                 steppedInputSection
             }
+        case .resting:
+            restDisplay
         case .finished:
             timerDoneCard
         }
+    }
+
+    private var restDisplay: some View {
+        VStack(spacing: 24) {
+            VStack(spacing: 8) {
+                Text(formatDuration(restRemaining))
+                    .font(.system(size: 80, weight: .bold, design: .rounded).monospacedDigit())
+                    .foregroundStyle(.primary)
+                Text("Rest")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            if restPending == .advanceExercise, let next = nextExercise {
+                NextExercisePreview(exercise: next)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 32)
     }
 
     private var timerDisplay: some View {
@@ -287,6 +331,15 @@ private struct ExerciseStageView: View {
             } else {
                 steppedBottomBar
             }
+        case .resting:
+            Button {
+                finishRest()
+            } label: {
+                Text("Skip rest")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
+            }
+            .buttonStyle(.bordered)
         case .finished:
             advanceButton
         }
@@ -310,6 +363,10 @@ private struct ExerciseStageView: View {
         switch inputStage {
         case .weight:
             Button {
+                guard activeWeightIsValid else {
+                    flash("Add a weight greater than 0")
+                    return
+                }
                 inputStage = .reps
             } label: {
                 Text("Add weight")
@@ -317,21 +374,27 @@ private struct ExerciseStageView: View {
                     .padding(.vertical, 6)
             }
             .buttonStyle(.borderedProminent)
-            .disabled(!activeWeightIsValid)
         case .reps:
             if hasReachedTargetSets {
                 VStack(spacing: 6) {
                     Button {
+                        guard activeRepsAreValid else {
+                            flash("Add at least 1 rep")
+                            return
+                        }
                         completeActiveSetAndContinue()
                     } label: {
-                        Text("Add set")
+                        Text("Add reps")
                             .font(.footnote.weight(.medium))
                             .foregroundStyle(.secondary)
                     }
                     .buttonStyle(.plain)
-                    .disabled(!activeRepsAreValid)
 
                     Button {
+                        guard activeRepsAreValid else {
+                            flash("Add at least 1 rep")
+                            return
+                        }
                         completeActiveSetAndAdvance()
                     } label: {
                         Text(isLast ? "Complete workout" : "Complete & Next")
@@ -340,18 +403,20 @@ private struct ExerciseStageView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(isLast ? .green : .accentColor)
-                    .disabled(!activeRepsAreValid)
                 }
             } else {
                 Button {
+                    guard activeRepsAreValid else {
+                        flash("Add at least 1 rep")
+                        return
+                    }
                     completeActiveSetAndContinue()
                 } label: {
-                    Text("Add set")
+                    Text("Add reps")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 6)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(!activeRepsAreValid)
             }
         }
     }
@@ -387,18 +452,52 @@ private struct ExerciseStageView: View {
     private func advance() {
         if isLast {
             onCompleteWorkout()
+        } else if exercise.restSeconds != nil {
+            startRest(.advanceExercise)
         } else {
             onAdvance()
         }
     }
 
+    private func startRest(_ pending: RestPending) {
+        guard let secs = exercise.restSeconds, secs > 0 else {
+            runPending(pending)
+            return
+        }
+        restPending = pending
+        restRemaining = secs
+        phase = .resting
+    }
+
+    private func finishRest() {
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        let pending = restPending
+        restPending = .none
+        restRemaining = 0
+        runPending(pending)
+    }
+
+    private func runPending(_ pending: RestPending) {
+        switch pending {
+        case .none, .resumeRunning:
+            phase = .running
+        case .advanceExercise:
+            onAdvance()
+        }
+    }
+
     private func tickTimer() {
-        guard phase == .running, exercise.isTimeBased else { return }
-        guard remainingSeconds > 0 else { return }
-        remainingSeconds -= 1
-        if remainingSeconds == 0 {
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
-            phase = .finished
+        if phase == .running, exercise.isTimeBased, remainingSeconds > 0 {
+            remainingSeconds -= 1
+            if remainingSeconds == 0 {
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                phase = .finished
+            }
+        } else if phase == .resting, restRemaining > 0 {
+            restRemaining -= 1
+            if restRemaining == 0 {
+                finishRest()
+            }
         }
     }
 
@@ -419,6 +518,9 @@ private struct ExerciseStageView: View {
         next.exercise = exercise
         context.insert(next)
         inputStage = .weight
+        if exercise.restSeconds != nil {
+            startRest(.resumeRunning)
+        }
     }
 
     private func completeActiveSetAndAdvance() {
@@ -436,5 +538,77 @@ private struct ExerciseStageView: View {
         fresh.exercise = exercise
         context.insert(fresh)
         inputStage = .weight
+    }
+
+    private func flash(_ message: String) {
+        UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        withAnimation(.spring(duration: 0.3)) { transientMessage = message }
+        Task {
+            try? await Task.sleep(for: .seconds(2))
+            await MainActor.run {
+                withAnimation(.easeOut(duration: 0.3)) { transientMessage = nil }
+            }
+        }
+    }
+}
+
+private struct NextExercisePreview: View {
+    let exercise: PlannedExercise
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Up next")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+
+            HStack(alignment: .top, spacing: 12) {
+                if let raw = exercise.videoURL?.trimmingCharacters(in: .whitespaces),
+                   !raw.isEmpty,
+                   let videoID = YouTubeURL.videoID(from: raw),
+                   let thumbURL = URL(string: "https://img.youtube.com/vi/\(videoID)/mqdefault.jpg") {
+                    AsyncImage(url: thumbURL) { image in
+                        image.resizable().aspectRatio(contentMode: .fill)
+                    } placeholder: {
+                        Color(.tertiarySystemBackground)
+                    }
+                    .frame(width: 96, height: 54)
+                    .clipShape(.rect(cornerRadius: 6))
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(exercise.name)
+                        .font(.headline)
+                        .multilineTextAlignment(.leading)
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    if let notes = exercise.notes?.trimmingCharacters(in: .whitespaces),
+                       !notes.isEmpty {
+                        Text(notes)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.secondarySystemBackground), in: .rect(cornerRadius: 10))
+    }
+
+    private var subtitle: String {
+        if let secs = exercise.durationSeconds {
+            return formatDuration(secs)
+        }
+        let setsText = exercise.targetSets.map(String.init) ?? "?"
+        let repsText = exercise.targetReps ?? "?"
+        var s = "\(setsText) × \(repsText)"
+        if let w = exercise.targetWeight {
+            s += " @ \(w.formatted(.number.precision(.fractionLength(0...2)))) kg"
+        }
+        return s
     }
 }

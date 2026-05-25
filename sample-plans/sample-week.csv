@@ -1,55 +1,55 @@
-date,exercise,sets,target_reps,target_weight,duration_seconds,video_url,notes
+date,exercise,sets,target_reps,target_weight,duration_seconds,rest_seconds,video_url,notes
 # Sample plan anchored to the week starting Mon 2026-05-25. Replace video_url with real form videos; the importer requires a valid YouTube video ID.
 # warmup
-2026-05-25,Arm Circles,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
-2026-05-25,Shoulder Dislocates,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Use a band or PVC
+2026-05-25,Arm Circles,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
+2026-05-25,Shoulder Dislocates,,,,60,30,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Use a band or PVC
 # exercises
-2026-05-25,Bench Press,4,6-8,80,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Pause briefly at chest
-2026-05-25,Incline Dumbbell Press,3,8-10,30,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-25,Cable Fly,3,12-15,15,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Squeeze at the front
-2026-05-25,Triceps Pushdown,4,10-12,40,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-25,Bench Press,4,6-8,80,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Pause briefly at chest
+2026-05-25,Incline Dumbbell Press,3,8-10,30,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-25,Cable Fly,3,12-15,15,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Squeeze at the front
+2026-05-25,Triceps Pushdown,4,10-12,40,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # cooldown
-2026-05-25,Chest Doorway Stretch,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
-2026-05-25,Child's Pose,,,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-25,Chest Doorway Stretch,,,,60,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
+2026-05-25,Child's Pose,,,,90,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # warmup
-2026-05-26,Scapular Pull-up,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Hollow body
-2026-05-26,Band Pull-Apart,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-26,Scapular Pull-up,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Hollow body
+2026-05-26,Band Pull-Apart,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # exercises
-2026-05-26,Pull-up,4,5-8,,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Add weight if all sets hit 8
-2026-05-26,Barbell Row,4,6-8,70,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-26,Seated Cable Row,3,10-12,55,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-26,Barbell Curl,3,8-10,30,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-26,Pull-up,4,5-8,,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Add weight if all sets hit 8
+2026-05-26,Barbell Row,4,6-8,70,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-26,Seated Cable Row,3,10-12,55,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-26,Barbell Curl,3,8-10,30,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # cooldown
-2026-05-26,Lat Stretch,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
+2026-05-26,Lat Stretch,,,,60,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
 # warmup
-2026-05-27,Hip Circles,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
-2026-05-27,Bodyweight Squat,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-27,Hip Circles,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each direction
+2026-05-27,Bodyweight Squat,,,,60,30,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # exercises
-2026-05-27,Back Squat,5,5,100,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Below parallel
-2026-05-27,Romanian Deadlift,3,8-10,90,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,"Pause at bottom, controlled"
-2026-05-27,Leg Press,3,10-12,140,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-27,Walking Lunges,3,12,20,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each leg
+2026-05-27,Back Squat,5,5,100,,180,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Below parallel
+2026-05-27,Romanian Deadlift,3,8-10,90,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,"Pause at bottom, controlled"
+2026-05-27,Leg Press,3,10-12,140,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-27,Walking Lunges,3,12,20,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each leg
 # cooldown
-2026-05-27,Pigeon Stretch,,,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
-2026-05-27,Couch Stretch,,,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
+2026-05-27,Pigeon Stretch,,,,90,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
+2026-05-27,Couch Stretch,,,,90,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
 # warmup
-2026-05-28,Arm Swings,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-28,Cat-Cow,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-28,Arm Swings,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-28,Cat-Cow,,,,60,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # exercises
-2026-05-28,Overhead Press,4,6-8,50,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-28,Lateral Raise,4,12-15,8,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-28,Rear Delt Fly,4,12-15,8,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-28,Face Pull,3,15-20,15,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-28,Overhead Press,4,6-8,50,,120,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-28,Lateral Raise,4,12-15,8,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-28,Rear Delt Fly,4,12-15,8,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-28,Face Pull,3,15-20,15,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # cooldown
-2026-05-28,Cross-Body Shoulder Stretch,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
+2026-05-28,Cross-Body Shoulder Stretch,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
 # warmup
-2026-05-29,Jumping Jacks,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-29,Glute Bridge,,,,45,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-29,Jumping Jacks,,,,60,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-29,Glute Bridge,,,,45,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # exercises
-2026-05-29,Conventional Deadlift,3,5,120,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-29,Front Squat,4,6-8,70,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
-2026-05-29,Bulgarian Split Squat,3,8-10,15,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each leg
-2026-05-29,Hip Thrust,3,10-12,80,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-29,Conventional Deadlift,3,5,120,,180,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-29,Front Squat,4,6-8,70,,150,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-29,Bulgarian Split Squat,3,8-10,15,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each leg
+2026-05-29,Hip Thrust,3,10-12,80,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
 # cooldown
-2026-05-29,Standing Hamstring Stretch,,,,60,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
-2026-05-29,Deep Squat Hold,,,,90,https://www.youtube.com/watch?v=dQw4w9WgXcQ,
+2026-05-29,Standing Hamstring Stretch,,,,60,15,https://www.youtube.com/watch?v=dQw4w9WgXcQ,Each side
+2026-05-29,Deep Squat Hold,,,,90,,https://www.youtube.com/watch?v=dQw4w9WgXcQ,

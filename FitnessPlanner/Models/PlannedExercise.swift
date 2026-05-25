@@ -34,6 +34,7 @@ final class PlannedExercise {
     var targetReps: String?
     var targetWeight: Double?
     var durationSeconds: Int?
+    var restSeconds: Int?
     var videoURL: String?
     var notes: String?
     var day: WorkoutDay?
@@ -49,6 +50,7 @@ final class PlannedExercise {
         targetReps: String? = nil,
         targetWeight: Double? = nil,
         durationSeconds: Int? = nil,
+        restSeconds: Int? = nil,
         videoURL: String? = nil,
         notes: String? = nil
     ) {
@@ -59,6 +61,7 @@ final class PlannedExercise {
         self.targetReps = targetReps
         self.targetWeight = targetWeight
         self.durationSeconds = durationSeconds
+        self.restSeconds = restSeconds
         self.videoURL = videoURL
         self.notes = notes
     }

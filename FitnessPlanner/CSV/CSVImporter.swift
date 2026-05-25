@@ -98,6 +98,17 @@ enum CSVImporter {
                 let repsStr = (row["target_reps"] ?? "").trimmingCharacters(in: .whitespaces)
                 let weightStr = (row["target_weight"] ?? "").trimmingCharacters(in: .whitespaces)
                 let durationStr = (row["duration_seconds"] ?? "").trimmingCharacters(in: .whitespaces)
+                let restStr = (row["rest_seconds"] ?? "").trimmingCharacters(in: .whitespaces)
+
+                let restSeconds: Int?
+                if restStr.isEmpty {
+                    restSeconds = nil
+                } else {
+                    guard let secs = Int(restStr), secs > 0 else {
+                        throw ImportError.invalidRow(line: line, reason: "rest_seconds must be a positive integer (got \"\(restStr)\")")
+                    }
+                    restSeconds = secs
+                }
 
                 let durationSeconds: Int?
                 let targetSets: Int?
@@ -158,6 +169,7 @@ enum CSVImporter {
                     targetReps: targetReps,
                     targetWeight: targetWeight,
                     durationSeconds: durationSeconds,
+                    restSeconds: restSeconds,
                     videoURL: rawVideo,
                     notes: notes
                 )

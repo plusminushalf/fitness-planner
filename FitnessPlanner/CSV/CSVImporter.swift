@@ -52,8 +52,94 @@ enum CSVImporter {
         try importContent(content, planName: planName, into: context)
     }
 
+    /// A fully-validated exercise, ready to be turned into model objects.
+    private struct ParsedExercise {
+        let name: String
+        let section: WorkoutSection
+        let targetSets: Int?
+        let targetReps: String?
+        let targetWeight: Double?
+        let durationSeconds: Int?
+        let restSeconds: Int?
+        let videoURL: String?
+        let notes: String?
+    }
+
+    /// A day's worth of validated exercises, in CSV order.
+    private struct ParsedDay {
+        let date: Date
+        var exercises: [ParsedExercise]
+    }
+
     /// Imports CSV text directly. Exposed for tests and the sample-data path.
-    static func importContent(_ csv: String, planName: String, into context: ModelContext) throws {
+    ///
+    /// When `mergeInto` is provided, the parsed days are merged into that plan: any date present
+    /// in the CSV replaces the matching day (the new paste wins on conflict), while days the plan
+    /// already has that aren't in the CSV are left untouched. When it's nil, a brand-new plan is
+    /// created. The whole CSV is validated before any mutation, so a malformed paste never
+    /// partially overwrites an existing plan.
+    static func importContent(
+        _ csv: String,
+        planName: String,
+        into context: ModelContext,
+        mergeInto existingPlan: WorkoutPlan? = nil
+    ) throws {
+        let parsedDays = try parse(csv)
+
+        // Phase 2: apply to the context. Nothing above this point mutates state.
+        let plan: WorkoutPlan
+        if let existingPlan {
+            plan = existingPlan
+        } else {
+            plan = WorkoutPlan(name: planName)
+            context.insert(plan)
+        }
+
+        // New paste wins on conflict: drop the plan's existing days for any date the CSV redefines.
+        let incomingDates = Set(parsedDays.map(\.date))
+        for day in plan.days where incomingDates.contains(day.date) {
+            context.delete(day)
+        }
+
+        for parsedDay in parsedDays {
+            let day = WorkoutDay(date: parsedDay.date)
+            day.plan = plan
+            context.insert(day)
+
+            for (index, ex) in parsedDay.exercises.enumerated() {
+                let exercise = PlannedExercise(
+                    name: ex.name,
+                    orderIndex: index,
+                    section: ex.section,
+                    targetSets: ex.targetSets,
+                    targetReps: ex.targetReps,
+                    targetWeight: ex.targetWeight,
+                    durationSeconds: ex.durationSeconds,
+                    restSeconds: ex.restSeconds,
+                    videoURL: ex.videoURL,
+                    notes: ex.notes
+                )
+                exercise.day = day
+                context.insert(exercise)
+
+                if let secs = ex.durationSeconds {
+                    let set = LoggedSet(setNumber: 1, durationSeconds: secs)
+                    set.exercise = exercise
+                    context.insert(set)
+                } else {
+                    for n in 1...max(1, ex.targetSets ?? 1) {
+                        let set = LoggedSet(setNumber: n)
+                        set.exercise = exercise
+                        context.insert(set)
+                    }
+                }
+            }
+        }
+    }
+
+    /// Phase 1: parse and fully validate the CSV into value types, grouped by date in CSV order.
+    /// Throws before any model mutation if anything is invalid.
+    private static func parse(_ csv: String) throws -> [ParsedDay] {
         let parsed = CSVParser.parse(csv)
         let dataRows = parsed.compactMap { row -> [String: String]? in
             if case .data(let d) = row { return d } else { return nil }
@@ -64,10 +150,8 @@ enum CSVImporter {
         let missing = requiredColumns.filter { !presentColumns.contains($0) }
         if !missing.isEmpty { throw ImportError.missingColumns(missing) }
 
-        let plan = WorkoutPlan(name: planName)
-        context.insert(plan)
-
-        var dayMap: [Date: WorkoutDay] = [:]
+        var orderedDays: [ParsedDay] = []
+        var indexByDate: [Date: Int] = [:]
         var currentSection: WorkoutSection = .exercise
         var dataRowIndex = 0
 
@@ -151,19 +235,8 @@ enum CSVImporter {
                 }
                 let notes = optional(row["notes"])
 
-                let day: WorkoutDay
-                if let existing = dayMap[date] {
-                    day = existing
-                } else {
-                    day = WorkoutDay(date: date)
-                    day.plan = plan
-                    dayMap[date] = day
-                    context.insert(day)
-                }
-
-                let exercise = PlannedExercise(
+                let exercise = ParsedExercise(
                     name: exerciseName,
-                    orderIndex: day.exercises.count,
                     section: currentSection,
                     targetSets: targetSets,
                     targetReps: targetReps,
@@ -173,24 +246,18 @@ enum CSVImporter {
                     videoURL: rawVideo,
                     notes: notes
                 )
-                exercise.day = day
-                context.insert(exercise)
 
-                if let secs = durationSeconds {
-                    let set = LoggedSet(setNumber: 1, durationSeconds: secs)
-                    set.exercise = exercise
-                    context.insert(set)
+                if let idx = indexByDate[date] {
+                    orderedDays[idx].exercises.append(exercise)
                 } else {
-                    for n in 1...max(1, targetSets ?? 1) {
-                        let set = LoggedSet(setNumber: n)
-                        set.exercise = exercise
-                        context.insert(set)
-                    }
+                    indexByDate[date] = orderedDays.count
+                    orderedDays.append(ParsedDay(date: date, exercises: [exercise]))
                 }
             }
         }
 
-        if dayMap.isEmpty { throw ImportError.noExercises }
+        if orderedDays.isEmpty { throw ImportError.noExercises }
+        return orderedDays
     }
 
     private static func optional(_ raw: String?) -> String? {

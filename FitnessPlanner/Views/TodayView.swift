@@ -17,12 +17,18 @@ struct TodayView: View {
         return Set(plan.days.map { cal.startOfDay(for: $0.date) })
     }
 
+    private var completedDates: Set<Date> {
+        let cal = Calendar.current
+        return Set(plan.days.filter { $0.completedAt != nil }.map { cal.startOfDay(for: $0.date) })
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             DateStrip(
                 month: displayedMonth,
                 selectedDate: $selectedDate,
-                datesWithWorkouts: datesWithWorkouts
+                datesWithWorkouts: datesWithWorkouts,
+                completedDates: completedDates
             )
             Divider()
             content
@@ -70,15 +76,27 @@ private struct DateStrip: View {
     let month: Date
     @Binding var selectedDate: Date
     let datesWithWorkouts: Set<Date>
+    let completedDates: Set<Date>
 
-    private var daysInMonth: [Date] {
+    private var stripDays: [Date] {
         let cal = Calendar.current
         guard let range = cal.range(of: .day, in: .month, for: month) else { return [] }
         var comps = cal.dateComponents([.year, .month], from: month)
-        return range.compactMap { day -> Date? in
+        let monthDays: [Date] = range.compactMap { day -> Date? in
             comps.day = day
             return cal.date(from: comps).map { cal.startOfDay(for: $0) }
         }
+        // Also surface the surrounding weeks, even when they spill into the adjacent months —
+        // otherwise the strip dead-ends at the month boundaries and the previous/next week's
+        // workouts are unreachable (e.g. on June 1 you couldn't scroll back into late May).
+        guard let first = monthDays.first, let last = monthDays.last else { return monthDays }
+        let prevWeek: [Date] = (1...7).reversed().compactMap { offset in
+            cal.date(byAdding: .day, value: -offset, to: first).map { cal.startOfDay(for: $0) }
+        }
+        let nextWeek: [Date] = (1...7).compactMap { offset in
+            cal.date(byAdding: .day, value: offset, to: last).map { cal.startOfDay(for: $0) }
+        }
+        return prevWeek + monthDays + nextWeek
     }
 
     private let today: Date = Calendar.current.startOfDay(for: .now)
@@ -87,12 +105,13 @@ private struct DateStrip: View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 6) {
-                    ForEach(daysInMonth, id: \.self) { date in
+                    ForEach(stripDays, id: \.self) { date in
                         DayPill(
                             date: date,
                             isSelected: Calendar.current.isDate(date, inSameDayAs: selectedDate),
                             isToday: Calendar.current.isDate(date, inSameDayAs: today),
-                            hasWorkout: datesWithWorkouts.contains(date)
+                            hasWorkout: datesWithWorkouts.contains(date),
+                            isCompleted: completedDates.contains(date)
                         )
                         .id(date)
                         .onTapGesture { selectedDate = Calendar.current.startOfDay(for: date) }
@@ -101,12 +120,12 @@ private struct DateStrip: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
             }
-            .onAppear { proxy.scrollTo(targetID(in: daysInMonth), anchor: .center) }
+            .onAppear { proxy.scrollTo(targetID(in: stripDays), anchor: .center) }
             .onChange(of: month) { _, _ in
-                withAnimation { proxy.scrollTo(targetID(in: daysInMonth), anchor: .center) }
+                withAnimation { proxy.scrollTo(targetID(in: stripDays), anchor: .center) }
             }
             .onChange(of: selectedDate) { _, _ in
-                withAnimation { proxy.scrollTo(targetID(in: daysInMonth), anchor: .center) }
+                withAnimation { proxy.scrollTo(targetID(in: stripDays), anchor: .center) }
             }
         }
     }
@@ -125,6 +144,7 @@ private struct DayPill: View {
     let isSelected: Bool
     let isToday: Bool
     let hasWorkout: Bool
+    let isCompleted: Bool
 
     private static let weekdayFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -145,10 +165,10 @@ private struct DayPill: View {
         VStack(spacing: 4) {
             Text(weekdayShort)
                 .font(.caption2)
-                .foregroundStyle(isSelected ? Color.white.opacity(0.9) : .secondary)
+                .foregroundStyle(isSelected || isCompleted ? Color.white.opacity(0.9) : .secondary)
             Text("\(dayNumber)")
                 .font(.title3.bold().monospacedDigit())
-                .foregroundStyle(isSelected ? .white : .primary)
+                .foregroundStyle(isSelected || isCompleted ? .white : .primary)
             Circle()
                 .fill(dotColor)
                 .frame(width: 5, height: 5)
@@ -156,18 +176,37 @@ private struct DayPill: View {
         .frame(width: 44, height: 64)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(isSelected ? Color.accentColor : Color(.secondarySystemBackground))
+                .fill(fillColor)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(isToday && !isSelected ? Color.accentColor : .clear, lineWidth: 1.5)
+                .strokeBorder(todayRingColor, lineWidth: 1.5)
         )
         .contentShape(.rect(cornerRadius: 12))
     }
 
+    private var todayRingColor: Color {
+        // The ring marks "today". On the selected (accent) or completed (green) fill the day is
+        // already obvious, and a blue ring there just clashes — use white, or nothing when selected.
+        guard isToday, !isSelected else { return .clear }
+        return isCompleted ? .white : .accentColor
+    }
+
+    private var fillColor: Color {
+        if isSelected { return .accentColor }
+        if isCompleted { return .green }
+        return Color(.secondarySystemBackground)
+    }
+
     private var dotColor: Color {
-        if !hasWorkout { return .clear }
-        return isSelected ? .white : .accentColor
+        // The selected day's accent fill hides completion, so surface it with a green dot there.
+        // A completed, unselected day already reads green from its fill, so its dot is redundant.
+        if isSelected {
+            if isCompleted { return .green }
+            return hasWorkout ? .white : .clear
+        }
+        if isCompleted { return .clear }
+        return hasWorkout ? .accentColor : .clear
     }
 }
 

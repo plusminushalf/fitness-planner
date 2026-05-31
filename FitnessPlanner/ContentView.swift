@@ -137,9 +137,12 @@ struct ContentView: View {
             return
         }
         let name = defaultPlanName()
+        let current = plans.first
         runWithLoader("Importing plan…") {
-            try CSVImporter.importContent(text, planName: name, into: context)
-            return "Plan imported from clipboard"
+            // Merge into the current plan: pasted days replace matching dates, days the plan
+            // already has that aren't in the paste are kept. Falls back to a new plan if none.
+            try CSVImporter.importContent(text, planName: name, into: context, mergeInto: current)
+            return current == nil ? "Plan imported from clipboard" : "Plan updated from clipboard"
         }
     }
 

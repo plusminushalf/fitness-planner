@@ -5,12 +5,45 @@ struct TodayView: View {
     let plan: WorkoutPlan
 
     @State private var selectedDate: Date = Calendar.current.startOfDay(for: .now)
-    @State private var displayedMonth: Date = Calendar.current.startOfMonth(for: .now)
+
+    // The month shown in the toolbar picker is derived from the selection, so it tracks the
+    // selected date across month boundaries with no separate state to keep in sync.
+    private var displayedMonth: Date {
+        Calendar.current.startOfMonth(for: selectedDate)
+    }
 
     private var selectedDay: WorkoutDay? {
         let cal = Calendar.current
         return plan.days.first { cal.isDate($0.date, inSameDayAs: selectedDate) }
     }
+
+    // One continuous, navigation-stable list of dates for the strip. It's derived only from the
+    // plan's span (unioned with today) — never from the selection — so moving the selection, even
+    // across a month boundary, never rebuilds it. That stability is what makes a cross-month tap
+    // animate as a single-cell scroll instead of a jarring full re-render.
+    private var stripDates: [Date] {
+        let cal = Calendar.current
+        let anchors = plan.days.map { cal.startOfDay(for: $0.date) } + [today]
+        let lower = cal.startOfMonth(for: anchors.min() ?? today)
+        let upperMonth = cal.startOfMonth(for: anchors.max() ?? today)
+        // Pad a week before the first month and a week after the last month so the surrounding
+        // weeks (and their workouts) stay reachable at the edges.
+        guard
+            let start = cal.date(byAdding: .day, value: -7, to: lower),
+            let lastDayOfRange = cal.date(byAdding: DateComponents(month: 1, day: 6), to: upperMonth)
+        else { return [] }
+        var dates: [Date] = []
+        var cursor = cal.startOfDay(for: start)
+        let end = cal.startOfDay(for: lastDayOfRange)
+        while cursor <= end {
+            dates.append(cursor)
+            guard let next = cal.date(byAdding: .day, value: 1, to: cursor) else { break }
+            cursor = next
+        }
+        return dates
+    }
+
+    private let today: Date = Calendar.current.startOfDay(for: .now)
 
     private var datesWithWorkouts: Set<Date> {
         let cal = Calendar.current
@@ -25,7 +58,7 @@ struct TodayView: View {
     var body: some View {
         VStack(spacing: 0) {
             DateStrip(
-                month: displayedMonth,
+                dates: stripDates,
                 selectedDate: $selectedDate,
                 datesWithWorkouts: datesWithWorkouts,
                 completedDates: completedDates
@@ -35,16 +68,9 @@ struct TodayView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                MonthYearPicker(displayedMonth: $displayedMonth)
-            }
-        }
-        .onChange(of: displayedMonth) { _, newMonth in
-            selectedDate = clampSameDayOfMonth(from: selectedDate, into: newMonth)
-        }
-        .onChange(of: selectedDate) { _, newDate in
-            let cal = Calendar.current
-            if !cal.isDate(newDate, equalTo: displayedMonth, toGranularity: .month) {
-                displayedMonth = cal.startOfMonth(for: newDate)
+                MonthYearPicker(displayedMonth: displayedMonth) { newMonth in
+                    selectedDate = clampSameDayOfMonth(from: selectedDate, into: newMonth)
+                }
             }
         }
     }
@@ -73,39 +99,23 @@ struct TodayView: View {
 // MARK: - Date strip
 
 private struct DateStrip: View {
-    let month: Date
+    // A single continuous list that stays identical across navigation. Because it never changes
+    // when the selection moves, selecting a date in an adjacent month is mechanically the same as
+    // selecting one in the current month: pills keep their identity and only the scroll + tint move.
+    let dates: [Date]
     @Binding var selectedDate: Date
     let datesWithWorkouts: Set<Date>
     let completedDates: Set<Date>
-
-    private var stripDays: [Date] {
-        let cal = Calendar.current
-        guard let range = cal.range(of: .day, in: .month, for: month) else { return [] }
-        var comps = cal.dateComponents([.year, .month], from: month)
-        let monthDays: [Date] = range.compactMap { day -> Date? in
-            comps.day = day
-            return cal.date(from: comps).map { cal.startOfDay(for: $0) }
-        }
-        // Also surface the surrounding weeks, even when they spill into the adjacent months —
-        // otherwise the strip dead-ends at the month boundaries and the previous/next week's
-        // workouts are unreachable (e.g. on June 1 you couldn't scroll back into late May).
-        guard let first = monthDays.first, let last = monthDays.last else { return monthDays }
-        let prevWeek: [Date] = (1...7).reversed().compactMap { offset in
-            cal.date(byAdding: .day, value: -offset, to: first).map { cal.startOfDay(for: $0) }
-        }
-        let nextWeek: [Date] = (1...7).compactMap { offset in
-            cal.date(byAdding: .day, value: offset, to: last).map { cal.startOfDay(for: $0) }
-        }
-        return prevWeek + monthDays + nextWeek
-    }
 
     private let today: Date = Calendar.current.startOfDay(for: .now)
 
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 6) {
-                    ForEach(stripDays, id: \.self) { date in
+                // Lazy so a multi-month range only materialises the visible pills; scrollTo still
+                // reaches off-screen ids.
+                LazyHStack(spacing: 6) {
+                    ForEach(dates, id: \.self) { date in
                         DayPill(
                             date: date,
                             isSelected: Calendar.current.isDate(date, inSameDayAs: selectedDate),
@@ -120,12 +130,19 @@ private struct DateStrip: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
             }
-            .onAppear { proxy.scrollTo(targetID(in: stripDays), anchor: .center) }
-            .onChange(of: month) { _, _ in
-                withAnimation { proxy.scrollTo(targetID(in: stripDays), anchor: .center) }
+            // A LazyHStack is greedy in the cross axis, so without a fixed height the horizontal
+            // ScrollView would expand to fill all vertical space and float the pills in the middle.
+            // 64 (pill height) + 8+8 (vertical padding) hugs the content exactly.
+            .frame(height: 80)
+            .onAppear {
+                // Defer one runloop tick: on first appear the lazy stack hasn't laid out the target
+                // cell yet, so an immediate scrollTo would leave today off-screen.
+                DispatchQueue.main.async {
+                    proxy.scrollTo(targetID(in: dates), anchor: .center)
+                }
             }
             .onChange(of: selectedDate) { _, _ in
-                withAnimation { proxy.scrollTo(targetID(in: stripDays), anchor: .center) }
+                withAnimation { proxy.scrollTo(targetID(in: dates), anchor: .center) }
             }
         }
     }
@@ -213,7 +230,8 @@ private struct DayPill: View {
 // MARK: - Month / Year picker
 
 private struct MonthYearPicker: View {
-    @Binding var displayedMonth: Date
+    let displayedMonth: Date
+    let onSelect: (Date) -> Void
 
     private static let labelFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -237,7 +255,7 @@ private struct MonthYearPicker: View {
         Menu {
             ForEach(months, id: \.self) { date in
                 Button {
-                    displayedMonth = date
+                    onSelect(date)
                 } label: {
                     if Calendar.current.isDate(date, equalTo: displayedMonth, toGranularity: .month) {
                         Label(format(date), systemImage: "checkmark")

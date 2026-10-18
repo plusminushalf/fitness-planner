@@ -13,6 +13,8 @@ struct FitnessPlannerApp: App {
             WorkoutDay.self,
             PlannedExercise.self,
             LoggedSet.self,
+            Routine.self,
+            RoutineExercise.self,
         ])
         let config = ModelConfiguration(schema: schema)
         if let c = try? ModelContainer(for: schema, configurations: [config]) {
@@ -27,6 +29,9 @@ struct FitnessPlannerApp: App {
     }
 
     var body: some Scene {
+        #if DEBUG
+        let _ = DemoData.seedIfRequested(into: container.mainContext)
+        #endif
         WindowGroup {
             ContentView()
         }

@@ -21,9 +21,7 @@ struct PlanHistoryView: View {
                     List {
                         ForEach(plans) { plan in
                             NavigationLink {
-                                TodayView(plan: plan)
-                                    .navigationTitle(plan.name)
-                                    .navigationBarTitleDisplayMode(.inline)
+                                PlanDaysView(plan: plan)
                             } label: {
                                 PlanHistoryRow(plan: plan)
                             }
@@ -54,6 +52,41 @@ struct PlanHistoryView: View {
             }
             try? context.save()
         }
+    }
+}
+
+/// Every day of an older plan, each opening its workout.
+private struct PlanDaysView: View {
+    let plan: WorkoutPlan
+
+    var body: some View {
+        List(plan.days.sorted { $0.date < $1.date }) { day in
+            NavigationLink {
+                ActiveWorkoutView(day: day)
+            } label: {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(day.displayTitle)
+                            .font(.body.weight(.semibold))
+                        Text("\(Fmt.dayAndDate(day.date)) · \(day.exercises.count) exercises")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if day.completedAt != nil {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(Color.doneGreen)
+                            .accessibilityLabel("Done")
+                    } else if day.hasLoggedWork {
+                        Text("\(day.completedSetCount) of \(day.totalSetCount) sets")
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+        .navigationTitle(plan.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -118,5 +151,6 @@ private struct PlanHistoryRow: View {
     PlanHistoryView()
         .modelContainer(for: [
             WorkoutPlan.self, WorkoutDay.self, PlannedExercise.self, LoggedSet.self,
+            Routine.self, RoutineExercise.self,
         ], inMemory: true)
 }

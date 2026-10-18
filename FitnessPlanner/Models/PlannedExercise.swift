@@ -37,6 +37,8 @@ final class PlannedExercise {
     var restSeconds: Int?
     var videoURL: String?
     var notes: String?
+    /// Raw `MuscleGroup`, set when the user picks one. Otherwise it's inferred from the name.
+    var muscleGroup: String?
     var day: WorkoutDay?
 
     @Relationship(deleteRule: .cascade, inverse: \LoggedSet.exercise)
@@ -52,7 +54,8 @@ final class PlannedExercise {
         durationSeconds: Int? = nil,
         restSeconds: Int? = nil,
         videoURL: String? = nil,
-        notes: String? = nil
+        notes: String? = nil,
+        muscleGroup: String? = nil
     ) {
         self.name = name
         self.orderIndex = orderIndex
@@ -64,6 +67,7 @@ final class PlannedExercise {
         self.restSeconds = restSeconds
         self.videoURL = videoURL
         self.notes = notes
+        self.muscleGroup = muscleGroup
     }
 
     var workoutSection: WorkoutSection {

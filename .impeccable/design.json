@@ -1,0 +1,500 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T00:00:00Z",
+  "title": "Design System: Fitness Planner",
+  "extensions": {
+    "platform": "ios",
+    "colorMeta": {
+      "hevy-blue": {
+        "role": "primary",
+        "displayName": "Hevy Blue",
+        "canonical": "#1F6FEB",
+        "appearance": {
+          "light": "#1F6FEB",
+          "dark": "#3D8BFF"
+        },
+        "source": "Assets.xcassets/AccentColor.colorset",
+        "tonalRamp": [
+          "oklch(15% 0.17 259)",
+          "oklch(25% 0.17 259)",
+          "oklch(35% 0.17 259)",
+          "oklch(48% 0.17 259)",
+          "oklch(60% 0.17 259)",
+          "oklch(72% 0.17 259)",
+          "oklch(84% 0.17 259)",
+          "oklch(95% 0.17 259)"
+        ]
+      },
+      "hevy-blue-dark": {
+        "role": "primary",
+        "displayName": "Hevy Blue (dark appearance)",
+        "canonical": "#3D8BFF",
+        "tonalRamp": [
+          "oklch(15% 0.17 259)",
+          "oklch(25% 0.17 259)",
+          "oklch(35% 0.17 259)",
+          "oklch(48% 0.17 259)",
+          "oklch(60% 0.17 259)",
+          "oklch(72% 0.17 259)",
+          "oklch(84% 0.17 259)",
+          "oklch(95% 0.17 259)"
+        ]
+      },
+      "done-green": {
+        "role": "secondary",
+        "displayName": "Done Green",
+        "canonical": "Color.green (system green)",
+        "appearance": {
+          "light": "#34C759",
+          "dark": "#30D158"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.17 150)",
+          "oklch(25% 0.17 150)",
+          "oklch(35% 0.17 150)",
+          "oklch(48% 0.17 150)",
+          "oklch(60% 0.17 150)",
+          "oklch(72% 0.17 150)",
+          "oklch(84% 0.17 150)",
+          "oklch(95% 0.17 150)"
+        ]
+      },
+      "done-row-wash": {
+        "role": "secondary",
+        "displayName": "Done Row Wash",
+        "canonical": "Color.green.opacity(0.16)",
+        "tonalRamp": [
+          "oklch(15% 0.17 150)",
+          "oklch(25% 0.17 150)",
+          "oklch(35% 0.17 150)",
+          "oklch(48% 0.17 150)",
+          "oklch(60% 0.17 150)",
+          "oklch(72% 0.17 150)",
+          "oklch(84% 0.17 150)",
+          "oklch(95% 0.17 150)"
+        ]
+      },
+      "record-gold": {
+        "role": "secondary",
+        "displayName": "Record Gold",
+        "canonical": "Color.orange (system orange)",
+        "appearance": {
+          "light": "#FF9500",
+          "dark": "#FF9F0A"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.17 70)",
+          "oklch(25% 0.17 70)",
+          "oklch(35% 0.17 70)",
+          "oklch(48% 0.17 70)",
+          "oklch(60% 0.17 70)",
+          "oklch(72% 0.17 70)",
+          "oklch(84% 0.17 70)",
+          "oklch(95% 0.17 70)"
+        ]
+      },
+      "warmup-orange": {
+        "role": "secondary",
+        "displayName": "Warm-up Orange",
+        "canonical": "Color.orange (system orange)",
+        "appearance": {
+          "light": "#FF9500",
+          "dark": "#FF9F0A"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.17 70)",
+          "oklch(25% 0.17 70)",
+          "oklch(35% 0.17 70)",
+          "oklch(48% 0.17 70)",
+          "oklch(60% 0.17 70)",
+          "oklch(72% 0.17 70)",
+          "oklch(84% 0.17 70)",
+          "oklch(95% 0.17 70)"
+        ]
+      },
+      "drop-purple": {
+        "role": "secondary",
+        "displayName": "Drop Purple",
+        "canonical": "Color.purple (system purple)",
+        "appearance": {
+          "light": "#AF52DE",
+          "dark": "#BF5AF2"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.18 310)",
+          "oklch(25% 0.18 310)",
+          "oklch(35% 0.18 310)",
+          "oklch(48% 0.18 310)",
+          "oklch(60% 0.18 310)",
+          "oklch(72% 0.18 310)",
+          "oklch(84% 0.18 310)",
+          "oklch(95% 0.18 310)"
+        ]
+      },
+      "failure-red": {
+        "role": "secondary",
+        "displayName": "Failure Red",
+        "canonical": "Color.red (system red)",
+        "appearance": {
+          "light": "#FF3B30",
+          "dark": "#FF453A"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.2 28)",
+          "oklch(25% 0.2 28)",
+          "oklch(35% 0.2 28)",
+          "oklch(48% 0.2 28)",
+          "oklch(60% 0.2 28)",
+          "oklch(72% 0.2 28)",
+          "oklch(84% 0.2 28)",
+          "oklch(95% 0.2 28)"
+        ]
+      },
+      "screen-grouped": {
+        "role": "neutral",
+        "displayName": "Screen Grouped",
+        "canonical": "systemGroupedBackground",
+        "appearance": {
+          "light": "#F2F2F7",
+          "dark": "#000000"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.006 285)",
+          "oklch(25% 0.006 285)",
+          "oklch(35% 0.006 285)",
+          "oklch(48% 0.006 285)",
+          "oklch(60% 0.006 285)",
+          "oklch(72% 0.006 285)",
+          "oklch(84% 0.006 285)",
+          "oklch(95% 0.006 285)"
+        ]
+      },
+      "card-surface": {
+        "role": "neutral",
+        "displayName": "Card Surface",
+        "canonical": "secondarySystemGroupedBackground",
+        "appearance": {
+          "light": "#FFFFFF",
+          "dark": "#1C1C1E"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.006 285)",
+          "oklch(25% 0.006 285)",
+          "oklch(35% 0.006 285)",
+          "oklch(48% 0.006 285)",
+          "oklch(60% 0.006 285)",
+          "oklch(72% 0.006 285)",
+          "oklch(84% 0.006 285)",
+          "oklch(95% 0.006 285)"
+        ]
+      },
+      "field-fill": {
+        "role": "neutral",
+        "displayName": "Field Fill",
+        "canonical": "tertiarySystemFill",
+        "appearance": {
+          "light": "rgba(118,118,128,0.12)",
+          "dark": "rgba(118,118,128,0.24)"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.01 285)",
+          "oklch(25% 0.01 285)",
+          "oklch(35% 0.01 285)",
+          "oklch(48% 0.01 285)",
+          "oklch(60% 0.01 285)",
+          "oklch(72% 0.01 285)",
+          "oklch(84% 0.01 285)",
+          "oklch(95% 0.01 285)"
+        ]
+      },
+      "label-primary": {
+        "role": "neutral",
+        "displayName": "Label",
+        "canonical": "label",
+        "appearance": {
+          "light": "#000000",
+          "dark": "#FFFFFF"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.006 285)",
+          "oklch(25% 0.006 285)",
+          "oklch(35% 0.006 285)",
+          "oklch(48% 0.006 285)",
+          "oklch(60% 0.006 285)",
+          "oklch(72% 0.006 285)",
+          "oklch(84% 0.006 285)",
+          "oklch(95% 0.006 285)"
+        ]
+      },
+      "label-secondary": {
+        "role": "neutral",
+        "displayName": "Secondary Label",
+        "canonical": "secondaryLabel",
+        "appearance": {
+          "light": "rgba(60,60,67,0.6)",
+          "dark": "rgba(235,235,245,0.6)"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.01 285)",
+          "oklch(25% 0.01 285)",
+          "oklch(35% 0.01 285)",
+          "oklch(48% 0.01 285)",
+          "oklch(60% 0.01 285)",
+          "oklch(72% 0.01 285)",
+          "oklch(84% 0.01 285)",
+          "oklch(95% 0.01 285)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "separator",
+        "appearance": {
+          "light": "rgba(60,60,67,0.29)",
+          "dark": "rgba(84,84,88,0.6)"
+        },
+        "tonalRamp": [
+          "oklch(15% 0.01 285)",
+          "oklch(25% 0.01 285)",
+          "oklch(35% 0.01 285)",
+          "oklch(48% 0.01 285)",
+          "oklch(60% 0.01 285)",
+          "oklch(72% 0.01 285)",
+          "oklch(84% 0.01 285)",
+          "oklch(95% 0.01 285)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Large navigation titles and the finish headline.",
+        "swiftUI": ".largeTitle.bold()"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Screen section heads, workout detail titles, countdown clock.",
+        "swiftUI": ".title2.bold()"
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Session card titles, day-pill dates, summary figures.",
+        "swiftUI": ".title3.bold()"
+      },
+      "exercise-name": {
+        "displayName": "Exercise Name",
+        "purpose": "Exercise names in Hevy Blue; primary button labels.",
+        "swiftUI": ".headline"
+      },
+      "set-figure": {
+        "displayName": "Set Figure",
+        "purpose": "kg / reps / time values in set cells.",
+        "swiftUI": ".body.weight(.semibold).monospacedDigit()"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Notes, list rows, PREVIOUS values.",
+        "swiftUI": ".subheadline"
+      },
+      "stat-value": {
+        "displayName": "Stat Value",
+        "purpose": "StatPair values, secondary button and chip labels.",
+        "swiftUI": ".subheadline.weight(.semibold).monospacedDigit()"
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Stat labels, exercise meta lines, badges.",
+        "swiftUI": ".caption"
+      },
+      "label": {
+        "displayName": "Column Label",
+        "purpose": "Uppercase tracked set-table headers and list section labels.",
+        "swiftUI": ".caption2.weight(.semibold), tracking 0.6, uppercase"
+      }
+    },
+    "shadows": [
+      {
+        "name": "toast",
+        "value": "0 3px 8px rgba(0,0,0,0.12)",
+        "purpose": "Toast capsule over content (SwiftUI: black 12%, radius 8, y 3)."
+      },
+      {
+        "name": "overlay",
+        "value": "0 4px 12px rgba(0,0,0,0.15)",
+        "purpose": "Processing overlay panel on regularMaterial (black 15%, radius 12, y 4)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "toast-in",
+        "value": "spring(duration: 0.3), move from top + opacity",
+        "purpose": "Toast appearance."
+      },
+      {
+        "name": "toast-out",
+        "value": "easeOut 0.25s after 2.2s",
+        "purpose": "Toast dismissal."
+      },
+      {
+        "name": "snappy",
+        "value": ".snappy",
+        "purpose": "Date strip scroll-to-selection, video expand/collapse."
+      },
+      {
+        "name": "countdown",
+        "value": ".numericText(countsDown: true)",
+        "purpose": "Rest/timed-set clock digits."
+      },
+      {
+        "name": "set-complete-haptic",
+        "value": "sensoryFeedback .impact(weight: .light)",
+        "purpose": "Fires when a set's ✓ toggles."
+      }
+    ],
+    "breakpoints": [],
+    "setColumns": {
+      "set": "36pt",
+      "previous": "flex",
+      "weight": "70pt",
+      "reps": "58pt",
+      "time": "84pt",
+      "action": "44pt",
+      "gutter": "8pt",
+      "rowMinHeight": "44pt",
+      "cellHeight": "32pt",
+      "rowInsets": "12pt leading / 8pt trailing"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Full-width tint button; the one primary action on a screen (Start Workout).",
+      "html": "<button class=\"ds-btn-primary\">Start Workout</button>",
+      "css": ".ds-btn-primary{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;display:block;width:100%;min-height:48px;padding:0 16px;background:#1F6FEB;color:#fff;font-size:17px;font-weight:600;border:none;border-radius:10px;cursor:pointer}.ds-btn-primary:active{opacity:.8}.ds-btn-primary:focus-visible{outline:3px solid rgba(31,111,235,.4);outline-offset:2px}.ds-btn-primary:disabled{opacity:.4}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Full-width grey fill button for secondary actions (Add Set, Start Empty Workout).",
+      "html": "<button class=\"ds-btn-secondary\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M8 3v10M3 8h10\"/></svg>Add Set</button>",
+      "css": ".ds-btn-secondary{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;padding:0 12px;background:rgba(118,118,128,.12);color:#000;font-size:15px;font-weight:600;border:none;border-radius:10px;cursor:pointer}.ds-btn-secondary:active{background:rgba(118,118,128,.07)}.ds-btn-secondary:focus-visible{outline:3px solid rgba(31,111,235,.4);outline-offset:2px}"
+    },
+    {
+      "name": "Session Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Grouped card on the grey canvas with title, StatPairs and the primary action. Never nested.",
+      "html": "<div class=\"ds-canvas\"><div class=\"ds-card\"><div class=\"ds-card-title\">Sunday workout</div><div class=\"ds-card-sub\">Today · Sample week</div><div class=\"ds-stats\"><div><div class=\"ds-stat-l\">Time</div><div class=\"ds-stat-v\">21min</div></div><div><div class=\"ds-stat-l\">Volume</div><div class=\"ds-stat-v\">320 kg</div></div><div><div class=\"ds-stat-l\">Sets</div><div class=\"ds-stat-v\">2 of 15</div></div></div></div></div>",
+      "css": ".ds-canvas{background:#F2F2F7;padding:16px}.ds-card{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;background:#fff;border-radius:12px;padding:16px}.ds-card-title{font-size:20px;font-weight:700}.ds-card-sub{font-size:15px;color:rgba(60,60,67,.6);margin-top:2px}.ds-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px}.ds-stat-l{font-size:12px;color:rgba(60,60,67,.6)}.ds-stat-v{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}"
+    },
+    {
+      "name": "Set Table",
+      "kind": "custom",
+      "refersTo": "set-cell",
+      "description": "Signature ledger: tracked uppercase headers, hairline rows, 32pt cells in 44pt rows, completed rows washed green.",
+      "html": "<div class=\"ds-set-table\"><div class=\"ds-row ds-head\"><span>Set</span><span>Previous</span><span>kg</span><span>Reps</span><span>✓</span></div><div class=\"ds-row ds-done\"><b>1</b><span class=\"ds-prev\">80 kg × 8</span><span class=\"ds-cell ds-clear\">80</span><span class=\"ds-cell ds-clear\">8</span><button class=\"ds-check ds-check-on\" aria-label=\"Completed\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2.5 7.5l3 3 6-7\"/></svg></button></div><div class=\"ds-row\"><b class=\"ds-warm\">W</b><span class=\"ds-prev\">40 kg × 10</span><input class=\"ds-cell\" placeholder=\"40\"><input class=\"ds-cell\" placeholder=\"10\"><button class=\"ds-check\" aria-label=\"Mark set complete\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2.5 7.5l3 3 6-7\"/></svg></button></div></div>",
+      "css": ".ds-set-table{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;background:#fff}.ds-row{display:grid;grid-template-columns:36px 1fr 70px 58px 44px;gap:8px;align-items:center;min-height:44px;padding:0 8px 0 12px;border-bottom:.5px solid rgba(60,60,67,.29);font-variant-numeric:tabular-nums}.ds-head{min-height:24px;border:none;font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:rgba(60,60,67,.6);text-align:center}.ds-head span:nth-child(2){text-align:left}.ds-row b{text-align:center;font-size:15px}.ds-warm{color:#FF9500}.ds-prev{font-size:15px;color:rgba(60,60,67,.6)}.ds-done{background:rgba(52,199,89,.16)}.ds-cell{box-sizing:border-box;width:100%;height:32px;border:none;border-radius:6px;background:rgba(118,118,128,.12);font:600 17px/32px -apple-system,system-ui,sans-serif;text-align:center;font-variant-numeric:tabular-nums}.ds-cell::placeholder{color:rgba(0,0,0,.6)}.ds-cell:focus-visible{outline:2px solid #1F6FEB}.ds-clear{background:transparent;display:block}.ds-check{justify-self:center;width:32px;height:32px;border:none;border-radius:6px;background:rgba(118,118,128,.12);color:rgba(60,60,67,.6);display:grid;place-items:center;cursor:pointer}.ds-check-on{background:#34C759;color:#fff}.ds-check:focus-visible{outline:2px solid #1F6FEB;outline-offset:2px}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Capsule muscle-group filter; 34pt visual in a 44pt hit frame.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-on\">All</button><button class=\"ds-chip\">Chest</button><button class=\"ds-chip\">Back</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px}.ds-chip{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;min-height:34px;padding:0 14px;border:none;border-radius:9999px;background:rgba(118,118,128,.12);color:#000;font-size:15px;font-weight:600;cursor:pointer}.ds-chip:hover{background:rgba(118,118,128,.18)}.ds-chip:focus-visible{outline:2px solid #1F6FEB;outline-offset:2px}.ds-chip-on{background:#1F6FEB;color:#fff}"
+    },
+    {
+      "name": "Date Strip",
+      "kind": "nav",
+      "refersTo": "day-pill",
+      "description": "Scrolling day pills: weekday, tabular date, planned dot or done check. Selected fills tint; today strokes tint.",
+      "html": "<div class=\"ds-strip\"><button class=\"ds-day\"><span>Sat</span><b>17</b><i class=\"ds-dot\"></i></button><button class=\"ds-day ds-day-on\"><span>Sun</span><b>18</b><i class=\"ds-dot\"></i></button><button class=\"ds-day ds-day-today\"><span>Mon</span><b>19</b><i class=\"ds-dot\"></i></button></div>",
+      "css": ".ds-strip{display:flex;gap:8px}.ds-day{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;width:46px;height:64px;border:1.5px solid transparent;border-radius:12px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#000}.ds-day span{font-size:11px;font-weight:500;color:rgba(60,60,67,.6)}.ds-day b{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}.ds-dot{width:5px;height:5px;border-radius:50%;background:#1F6FEB}.ds-day-on{background:#1F6FEB;color:#fff}.ds-day-on span{color:rgba(255,255,255,.85)}.ds-day-on .ds-dot{background:#fff}.ds-day-today{border-color:#1F6FEB}.ds-day-today b{color:#1F6FEB}.ds-day:focus-visible{outline:2px solid #1F6FEB;outline-offset:2px}"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Capsule state badge at 14% fill: In progress (tint), Done (green).",
+      "html": "<span class=\"ds-badge\">In progress</span> <span class=\"ds-badge ds-badge-done\">Done</span>",
+      "css": ".ds-badge{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;display:inline-block;padding:4px 8px;border-radius:9999px;font-size:12px;font-weight:600;color:#1F6FEB;background:rgba(31,111,235,.14)}.ds-badge-done{color:#248A3D;background:rgba(52,199,89,.14)}"
+    },
+    {
+      "name": "Toast",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Top-anchored material capsule confirmation; auto-dismisses after 2.2s.",
+      "html": "<div class=\"ds-toast\">Routine saved</div>",
+      "css": ".ds-toast{font-family:-apple-system,system-ui,'SF Pro Text',sans-serif;display:inline-block;padding:10px 16px;border-radius:9999px;background:rgba(242,242,247,.85);backdrop-filter:blur(20px);box-shadow:0 3px 8px rgba(0,0,0,.12);font-size:15px;font-weight:600}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Ledger, Not the Wizard",
+    "overview": "**Creative North Star: \"The Ledger, Not the Wizard\"**\n\nFitness Planner speaks Hevy's language with native iOS grammar. Every set of every exercise lives in one scrolling table, read at a glance between sets with a thumb and a short look. Grouped system backgrounds, rounded white cards on the home and history screens, and a flat, edge-to-edge set table during the workout itself. Density comes from columns and hairlines, not from boxes.\n\nColour is restrained: neutrals from the iOS system palette plus one Hevy-blue tint for everything interactive. The only other hues mean set state: green for done, orange for warm-up and records, purple for drop sets, red for failure. Type is SF Pro at Dynamic Type sizes, with tabular figures anywhere a number is compared against another number. Imagery is limited to YouTube thumbnails a plan provides; otherwise exercises are shown as initials.",
+    "keyCharacteristics": [
+      "One tint (Hevy blue) for every tappable thing, including exercise names.",
+      "The set table: SET · PREVIOUS · KG · REPS · ✓, tracked uppercase caption headers, hairline separators, completed rows washed green.",
+      "Tabular (monospaced) digits on every figure.",
+      "32pt visual controls inside 44pt hit frames.",
+      "SF Pro and SF Symbols only; system materials and grouped backgrounds.",
+      "Light and dark appearance both supported through system colours plus the two-value tint asset."
+    ],
+    "rules": [
+      {
+        "name": "The One Tint Rule",
+        "body": "Hevy Blue is the only interactive colour. If it is tappable and not a state, it is blue; if it is blue, it is tappable or it marks today/selection.",
+        "section": "colors"
+      },
+      {
+        "name": "The State-Only Hues Rule",
+        "body": "Green, orange, purple and red never decorate. Each one names a set state (done, warm-up/record, drop, failure) and appears only where that state is true.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every number that can be compared to another (weights, reps, clocks, volumes, dates in the strip) uses monospaced digits so columns hold still as values change.",
+        "section": "typography"
+      },
+      {
+        "name": "The Dynamic Type Rule",
+        "body": "Use text styles, not fixed point sizes. Sizes in the frontmatter are the default (Large) content size; the app scales with the user's setting.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ledger Rule",
+        "body": "Sets are rows in a table separated by hairlines, never cards. One exercise is a header, its notes and rest row, the column header, its set rows, and an Add Set button, in one continuous list.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Ledger Rule",
+        "body": "Cards, rows, buttons and cells carry no shadow; only something that floats temporarily above the content may.",
+        "section": "elevation"
+      },
+      {
+        "name": "The 44 Rule",
+        "body": "Visual controls may be smaller than 44pt (32pt cells, 34pt chips) but their hit frame never is.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** use Hevy Blue for every interactive element and every exercise name, and nothing else outside selection/today.",
+      "**Do** put sets in hairline-separated full-bleed rows with fixed shared column widths (SET 36, KG 70, REPS 58, ✓ 44, 8pt gutters).",
+      "**Do** use monospaced digits for every weight, rep count, clock and volume.",
+      "**Do** draw 32pt cells inside 44pt hit frames, and keep 44pt minimum row heights.",
+      "**Do** show the previous performance on the set row itself, in secondary tabular text.",
+      "**Do** use system colours, grouped backgrounds and Dynamic Type text styles so light and dark mode follow the system.",
+      "**Do** use continuous corners at the four radii (6, 10, 12, capsule)."
+    ],
+    "donts": [
+      "**Don't** wrap individual sets or set tables in cards, and never nest cards.",
+      "**Don't** use green, orange, purple or red for decoration; they mean done, warm-up/record, drop and failure.",
+      "**Don't** introduce a second tint or a gradient fill.",
+      "**Don't** use custom fonts or non-SF icon sets.",
+      "**Don't** put shadows on cards, rows or buttons; shadows belong only to transient floating chrome (toast, overlay).",
+      "**Don't** show exercise imagery or muscle diagrams the app doesn't ship; fall back to initials."
+    ]
+  }
+}

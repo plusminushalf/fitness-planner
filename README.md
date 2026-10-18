@@ -25,10 +25,10 @@ Your real plans and CSV exports stay out of git: `*.csv` is ignored everywhere e
 
 Free, TestFlight-style updates without a paid developer account:
 
-1. Install [SideStore](https://sidestore.io) with your Apple ID (one-time pairing from a Mac).
+1. Install [SideStore](https://sidestore.io) with your Apple ID: [LocalDevVPN](https://apps.apple.com/app/localdevvpn/id6755608044) on the phone, then [iloader](https://iloader.app) on a Mac over USB (one time). Follow [their install guide](https://docs.sidestore.io/docs/installation/prerequisites).
 2. In SideStore → Sources → **+**, add:
    `https://github.com/plusminushalf/fitness-planner/releases/latest/download/source.json`
-3. Install Fitness Planner from the source. New releases appear under Updates; SideStore re-signs every 7 days in the background.
+3. Install Fitness Planner from the source. New releases appear under Updates. Apps signed with a free Apple ID expire after 7 days: with LocalDevVPN connected, tap the day counter in My Apps to refresh (or use a Shortcuts automation that runs SideStore's Refresh All Apps action).
 
 ## Releasing
 

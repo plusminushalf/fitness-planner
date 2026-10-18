@@ -9,6 +9,8 @@ Personal-use, sideload-friendly. No accounts, no servers, no third-party SDKs.
 Prereqs: macOS, Xcode 17+, [xcodegen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
 ```sh
+git config core.hooksPath .githooks   # once per clone: blocks committing plans, exports, team IDs
+echo 'DEVELOPMENT_TEAM = <your-team-id>' > Config/Local.xcconfig   # gitignored; only needed to run on a device
 xcodegen generate
 open FitnessPlanner.xcodeproj
 ```
@@ -17,7 +19,24 @@ Then in Xcode:
 - Pick a destination (your phone, or an iOS Simulator if a matching runtime is installed).
 - Cmd+R to run.
 
-The first time you sideload to a real device with a free Apple ID, Xcode will set up signing automatically. The signing cert expires after 7 days — to skip the manual re-sign, look at [AltStore](https://altstore.io) or [SideStore](https://sidestore.io).
+Your real plans and CSV exports stay out of git: `*.csv` is ignored everywhere except `sample-plans/sample-week.csv`, and the pre-commit hook refuses them even with `git add -f`.
+
+## Install on iPhone (SideStore)
+
+Free, TestFlight-style updates without a paid developer account:
+
+1. Install [SideStore](https://sidestore.io) with your Apple ID (one-time pairing from a Mac).
+2. In SideStore → Sources → **+**, add:
+   `https://github.com/plusminushalf/fitness-planner/releases/latest/download/source.json`
+3. Install Fitness Planner from the source. New releases appear under Updates; SideStore re-signs every 7 days in the background.
+
+## Releasing
+
+```sh
+git tag v1.1.0 && git push origin v1.1.0
+```
+
+The [Release workflow](.github/workflows/release.yml) builds an unsigned IPA (`scripts/build-ipa.sh`), writes the source feed (`scripts/make-source.sh`) and publishes both as a GitHub release, with commit subjects since the previous tag as release notes.
 
 ## CSV import format
 

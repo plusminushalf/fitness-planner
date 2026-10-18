@@ -16,8 +16,16 @@ xcuserdata/
 .build/
 Package.resolved
 
-# Actual Plan
+# Personal training data: real plans and CSV exports never go in the repo.
+# Only the synthetic sample in sample-plans/ is tracked.
 plan/
+plans/
+exports/
+*.csv
+*.tsv
+*.xlsx
+*.numbers
+!sample-plans/sample-week.csv
 
 # Per-machine signing team (see Config/Signing.xcconfig)
 Config/Local.xcconfig

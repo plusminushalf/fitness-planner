@@ -18,3 +18,9 @@ Package.resolved
 
 # Actual Plan
 plan/
+
+# Per-machine signing team (see Config/Signing.xcconfig)
+Config/Local.xcconfig
+
+# Claude Code local settings
+.claude/settings.local.json

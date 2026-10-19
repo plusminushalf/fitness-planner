@@ -1,12 +1,15 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct FitnessPlannerApp: App {
     let container: ModelContainer
+    @Environment(\.scenePhase) private var scenePhase
 
     init() {
         WebViewWarmup.warm()
+        UNUserNotificationCenter.current().delegate = ForegroundNotificationPresenter.shared
 
         let schema = Schema([
             WorkoutPlan.self,
@@ -36,6 +39,9 @@ struct FitnessPlannerApp: App {
             ContentView()
         }
         .modelContainer(container)
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            if phase == .active { BuildExpiry.scheduleReminders() }
+        }
     }
 
     private static func deleteDefaultStore() {

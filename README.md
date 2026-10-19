@@ -21,14 +21,14 @@ Then in Xcode:
 
 Your real plans and CSV exports stay out of git: `*.csv` is ignored everywhere except `sample-plans/sample-week.csv`, and the pre-commit hook refuses them even with `git add -f`.
 
-## Install on iPhone (SideStore)
+## Install on iPhone (Xcode over Wi-Fi)
 
-Free, TestFlight-style updates without a paid developer account:
+Free with a personal Apple ID, no cable after the first time:
 
-1. Install [SideStore](https://sidestore.io) with your Apple ID: [LocalDevVPN](https://apps.apple.com/app/localdevvpn/id6755608044) on the phone, then [iloader](https://iloader.app) on a Mac over USB (one time). Follow [their install guide](https://docs.sidestore.io/docs/installation/prerequisites).
-2. In SideStore → Sources → **+**, add:
-   `https://github.com/plusminushalf/fitness-planner/releases/latest/download/source.json`
-3. Install Fitness Planner from the source. New releases appear under Updates. Apps signed with a free Apple ID expire after 7 days: with LocalDevVPN connected, tap the day counter in My Apps to refresh (or use a Shortcuts automation that runs SideStore's Refresh All Apps action).
+1. Plug the phone in once. In Xcode → Window → Devices and Simulators, select it and tick **Connect via network**.
+2. From then on, with the Mac and phone on the same Wi-Fi, pick the phone as the destination and Cmd+R (switch the scheme to Release for a build without demo data).
+
+Apps signed with a free Apple ID stop opening after 7 days. The app reads its own expiry from the signing profile and sends a reminder at 9 AM each day saying how many days are left; opening it after a reinstall resets the countdown. Xcode keeps reusing the current profile until it lapses, so reinstalling early may not buy more days.
 
 ## Releasing
 
@@ -36,7 +36,7 @@ Free, TestFlight-style updates without a paid developer account:
 git tag v1.1.0 && git push origin v1.1.0
 ```
 
-The [Release workflow](.github/workflows/release.yml) builds an unsigned IPA (`scripts/build-ipa.sh`), writes the source feed (`scripts/make-source.sh`) and publishes both as a GitHub release, with commit subjects since the previous tag as release notes.
+For sideloading stores (SideStore, AltStore) rather than Xcode installs. The [Release workflow](.github/workflows/release.yml) builds an unsigned IPA (`scripts/build-ipa.sh`), writes the source feed (`scripts/make-source.sh`) and publishes both as a GitHub release, with commit subjects since the previous tag as release notes.
 
 ## CSV import format
 

@@ -78,18 +78,6 @@ final class Countdown {
         content.sound = .default
         let interval = max(1, endDate.timeIntervalSinceNow)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
-        let request = UNNotificationRequest(identifier: Self.notificationID, content: content, trigger: trigger)
-        center.getNotificationSettings { settings in
-            switch settings.authorizationStatus {
-            case .notDetermined:
-                center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
-                    if granted { center.add(request) }
-                }
-            case .authorized, .provisional, .ephemeral:
-                center.add(request)
-            default:
-                break
-            }
-        }
+        center.addIfAllowed([UNNotificationRequest(identifier: Self.notificationID, content: content, trigger: trigger)])
     }
 }
